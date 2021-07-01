@@ -38,7 +38,7 @@ class PublicUserApiTests(TestCase):
         self.assertTrue(user.check_password(VALID_PAYLOAD['password']))
         self.assertNotIn('password', res.data)
 
-    def test_user_exists(self):
+    def test_user_already_exists(self):
         '''Test creating a user with duplicate data fails'''
         create_user(**VALID_PAYLOAD)
 
@@ -56,10 +56,11 @@ class PublicUserApiTests(TestCase):
 
         res = self.client.post(CREATE_USER_URL, short_pass_payload)
 
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         user_exists = get_user_model().objects.filter(
             email=short_pass_payload['email']
         ).exists()
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertFalse(user_exists)
 
     def test_create_token(self):
