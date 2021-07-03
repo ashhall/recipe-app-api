@@ -60,7 +60,7 @@ class PrivateTagsApiTests(TestCase):
         )
         Tag.objects.create(user=unauthenticated_user, name='Tag Name Unauth')
 
-        # add a tag to the authenticated user
+        # create a tag associated to the authenticated user
         tag = Tag.objects.create(user=self.user, name='Tag Name')
 
         res = self.client.get(TAGS_URL)
@@ -84,7 +84,7 @@ class PrivateTagsApiTests(TestCase):
         self.assertTrue(tag_exists)
 
     def test_create_tag_invalid(self):
-        '''Test creating a new tag with invalid payload'''
+        '''Test that creating a new tag with invalid payload fails'''
         payload = {'name': ''}
 
         res = self.client.post(TAGS_URL, payload)
