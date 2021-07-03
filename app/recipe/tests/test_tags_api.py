@@ -53,15 +53,15 @@ class PrivateTagsApiTests(TestCase):
     def test_tags_limited_to_user(self):
         '''Test that tags returned are for the authenticated user'''
 
-        # create another user with tag 'Appetizer'
-        user2 = get_user_model().objects.create_user(
+        # create another user with an associated tag
+        unauthenticated_user = get_user_model().objects.create_user(
             'test2@gmail.com',
             'testpassword2'
         )
-        Tag.objects.create(user=user2, name='Tag Name 1')
+        Tag.objects.create(user=unauthenticated_user, name='Tag Name Unauth')
 
-        # add tag 'Breakfast' to self.user
-        tag = Tag.objects.create(user=self.user, name='Tag Name 2')
+        # add a tag to the authenticated user
+        tag = Tag.objects.create(user=self.user, name='Tag Name')
 
         res = self.client.get(TAGS_URL)
 
